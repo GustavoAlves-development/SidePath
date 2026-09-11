@@ -62,6 +62,41 @@ html, body {
 
 .hidden { display: none !important; }
 
+/* ---------- Unlock toast (post-checkout redirect confirmation) ---------- */
+
+.unlock-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 20px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 200;
+  max-width: calc(100vw - 40px);
+}
+
+.unlock-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.unlock-toast svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+
 body {
   font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
   line-height: 1.6;

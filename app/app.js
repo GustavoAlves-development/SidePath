@@ -1,3 +1,33 @@
+// ---------- Unlock routes (for post-checkout redirects) ----------
+// Visiting /unlock/roadmap or /unlock/ideas grants that product locally and
+// cleans the URL back to "/". Built to match Stripe's success_url pattern:
+// https://sidepath.site/unlock/roadmap?session_id={CHECKOUT_SESSION_ID}
+// Swap the localStorage write below for a real entitlement check (e.g. a
+// server call that verifies the session_id) once Stripe is wired up.
+
+const UNLOCK_ROUTE_PRODUCTS = ['roadmap', 'ideas'];
+const unlockRouteMatch = window.location.pathname.match(/^\/unlock\/(roadmap|ideas)\/?$/i);
+let pendingUnlockProduct = null;
+
+if (unlockRouteMatch) {
+  pendingUnlockProduct = unlockRouteMatch[1].toLowerCase();
+  localStorage.setItem(`sidepath_unlocked_${pendingUnlockProduct}`, 'true');
+  window.history.replaceState({}, '', '/');
+}
+
+function showUnlockToast(product) {
+  const names = { roadmap: 'First $1,000 Roadmap', ideas: '50 Extra Income Ideas' };
+  const toast = document.createElement('div');
+  toast.className = 'unlock-toast';
+  toast.innerHTML = `<svg viewBox="0 0 24 24"><use href="#icon-check"/></svg><span>Unlocked — ${names[product] || 'your purchase'} is ready.</span>`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 4500);
+}
+
 // ---------- Tab navigation ----------
 
 const tabs = document.querySelectorAll('.tab');
@@ -1037,3 +1067,8 @@ if (goalForm) {
 }
 
 renderTracker();
+
+if (pendingUnlockProduct) {
+  goToPanel(pendingUnlockProduct);
+  showUnlockToast(pendingUnlockProduct);
+}

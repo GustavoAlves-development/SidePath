@@ -4,7 +4,7 @@
     {
       "name": "sidepath-app",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "app", "-l", "4173"],
+      "runtimeArgs": ["--yes", "serve", "app", "-l", "4173", "-s"],
       "port": 4173
     }
   ]
