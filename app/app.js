@@ -894,13 +894,20 @@ function applyGateState(product) {
   if (content) content.classList.toggle('hidden', !unlocked);
 }
 
+// Unlock links (data-unlock) point straight at a real Stripe Payment Link —
+// they navigate away on click, there's no JS to intercept here anymore.
+// Actual entitlement is granted by the /unlock/:product redirect route
+// (see the top of this file) once Stripe sends the buyer back after payment.
+// If a product is already unlocked, swap its link for a plain status badge
+// so a returning buyer isn't sent to checkout again.
 function refreshUnlockButtons() {
-  document.querySelectorAll('[data-unlock]').forEach(btn => {
-    const product = btn.dataset.unlock;
-    const unlocked = isUnlocked(product);
-    btn.disabled = unlocked;
-    btn.textContent = unlocked ? 'Unlocked' : btn.dataset.label;
-    btn.classList.toggle('btn-unlocked', unlocked);
+  document.querySelectorAll('[data-unlock]').forEach(link => {
+    const product = link.dataset.unlock;
+    if (!isUnlocked(product)) return;
+    const status = document.createElement('span');
+    status.className = 'price-status active';
+    status.textContent = 'Unlocked';
+    link.replaceWith(status);
   });
 }
 
@@ -909,17 +916,6 @@ function refreshAllGates() {
   applyGateState('ideas');
   refreshUnlockButtons();
 }
-
-document.querySelectorAll('[data-unlock]').forEach(btn => {
-  btn.dataset.label = btn.textContent;
-  btn.addEventListener('click', () => {
-    const product = btn.dataset.unlock;
-    localStorage.setItem(UNLOCK_KEYS[product], 'true');
-    applyGateState(product);
-    refreshUnlockButtons();
-    goToPanel(product);
-  });
-});
 
 const resetBtn = document.getElementById('resetDemo');
 if (resetBtn) {
