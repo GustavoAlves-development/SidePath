@@ -1,6 +1,5 @@
 {
-  "outputDirectory": "app",
   "rewrites": [
-    { "source": "/unlock/:product", "destination": "/index.html" }
+    { "source": "/unlock/:product", "destination": "/app/index.html" }
   ]
 }

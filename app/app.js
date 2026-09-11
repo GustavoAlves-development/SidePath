@@ -12,7 +12,7 @@ let pendingUnlockProduct = null;
 if (unlockRouteMatch) {
   pendingUnlockProduct = unlockRouteMatch[1].toLowerCase();
   localStorage.setItem(`sidepath_unlocked_${pendingUnlockProduct}`, 'true');
-  window.history.replaceState({}, '', '/');
+  window.history.replaceState({}, '', '/app/');
 }
 
 function showUnlockToast(product) {
