@@ -1,0 +1,550 @@
+<title>Pricing and Checkout Structure</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --paper: #f7f5f0;
+    --paper-raised: #ffffff;
+    --ink: #1b2430;
+    --ink-soft: #5a6472;
+    --ink-faint: #8b93a0;
+    --accent: #3d6b63;
+    --accent-strong: #2a4d47;
+    --accent-soft: #dfe9e5;
+    --line: #ddd8cd;
+    --line-soft: #eae6dc;
+    --gold: #a3702f;
+    --gold-soft: #f1e4d1;
+    --danger: #a34a3d;
+    --radius: 10px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181d;
+      --paper-raised: #1b2128;
+      --ink: #e9e6de;
+      --ink-soft: #a3aab5;
+      --ink-faint: #707885;
+      --accent: #6fa89b;
+      --accent-strong: #8fc2b5;
+      --accent-soft: #223330;
+      --line: #2c333c;
+      --line-soft: #232a32;
+      --gold: #d4a15c;
+      --gold-soft: #332a1c;
+      --danger: #cb8578;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #14181d;
+    --paper-raised: #1b2128;
+    --ink: #e9e6de;
+    --ink-soft: #a3aab5;
+    --ink-faint: #707885;
+    --accent: #6fa89b;
+    --accent-strong: #8fc2b5;
+    --accent-soft: #223330;
+    --line: #2c333c;
+    --line-soft: #232a32;
+    --gold: #d4a15c;
+    --gold-soft: #332a1c;
+    --danger: #cb8578;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 64px 24px 100px;
+  }
+
+  header.doc-head {
+    margin-bottom: 56px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(32px, 5vw, 44px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  .doc-sub {
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    max-width: 58ch;
+  }
+
+  h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -0.005em;
+    margin: 0 0 6px;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .section {
+    margin-top: 64px;
+  }
+
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+
+  .section-intro {
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 10px 0 28px;
+    font-size: 15.5px;
+  }
+
+  p { margin: 0 0 14px; max-width: 66ch; }
+  .section p:last-child { margin-bottom: 0; }
+
+  strong { color: var(--ink); font-weight: 600; }
+
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.88em;
+    background: var(--line-soft);
+    padding: 0.12em 0.4em;
+    border-radius: 4px;
+    color: var(--accent-strong);
+  }
+
+  /* Pricing table */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+
+  .price-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .price-card.primary {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .price-kind {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .price-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .price-figures {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .price-full {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .price-full.struck {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+    text-decoration-color: var(--ink-faint);
+  }
+
+  .price-discounted {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .price-period {
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  .price-badge {
+    align-self: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--gold-soft);
+    color: var(--gold);
+  }
+
+  .price-note {
+    font-size: 13px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--line-soft);
+    padding-top: 12px;
+    margin-top: auto;
+  }
+
+  /* Stripe object mapping table */
+  .obj-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 14.5px;
+  }
+
+  .obj-table th {
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    padding: 0 12px 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .obj-table td {
+    padding: 12px 12px 12px 0;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+    color: var(--ink-soft);
+  }
+
+  .obj-table td:first-child { color: var(--ink); font-weight: 500; white-space: nowrap; }
+  .obj-table tr:last-child td { border-bottom: none; }
+
+  .scroll-wrap { overflow-x: auto; }
+
+  /* Flow steps */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 8px;
+  }
+
+  .flow-step {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .flow-step:last-child { border-bottom: none; }
+
+  .flow-index {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    padding-top: 2px;
+  }
+
+  .flow-title {
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 3px;
+    font-size: 15px;
+  }
+
+  .flow-body {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    max-width: 62ch;
+  }
+
+  .flow-event {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  /* Schema block */
+  .schema {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+
+  .schema .tbl-name { color: var(--accent-strong); font-weight: 600; }
+  .schema .field { color: var(--ink-soft); }
+  .schema .field-name { color: var(--ink); }
+  .schema .type { color: var(--ink-faint); }
+
+  /* Open questions */
+  .qlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .qlist li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 12px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+
+  .qlist li::before {
+    content: '?';
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--danger);
+    font-weight: 600;
+  }
+
+  .qlist strong { display: block; color: var(--ink); margin-bottom: 2px; font-weight: 600; }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checklist li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 12px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    align-items: start;
+  }
+
+  .checklist li::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 4px;
+    margin-top: 2px;
+  }
+
+  footer.doc-foot {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+
+<div class="page">
+
+  <header class="doc-head">
+    <div class="eyebrow">Plan &middot; Pricing &amp; Checkout</div>
+    <h1>App subscription + two standalone content packs</h1>
+    <p class="doc-sub">How to structure products, prices, and discounts in Stripe for a recurring core app plus two one-time content add-ons — built for the same customer to buy all three.</p>
+  </header>
+
+  <section class="section">
+    <div class="section-num">01</div>
+    <h2>The three products</h2>
+    <p class="section-intro">The app is the subscription that carries recurring revenue. Content A and Content B are standalone purchases — paid once, no future billing — and act as a natural upsell once the customer already trusts the app.</p>
+
+    <div class="pricing-grid">
+      <div class="price-card primary">
+        <span class="price-kind">Recurring</span>
+        <span class="price-name">Core App</span>
+        <div class="price-figures">
+          <span class="price-full">$19</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <span class="price-note">No discount planned — it's the entry point, so the price stays fixed.</span>
+      </div>
+
+      <div class="price-card">
+        <span class="price-kind">One-time</span>
+        <span class="price-name">Content A</span>
+        <div class="price-figures">
+          <span class="price-full struck">$29</span>
+          <span class="price-discounted">$22</span>
+        </div>
+        <span class="price-badge">&minus;$7 with coupon</span>
+        <span class="price-note">Full price $29. A fixed $7 coupon brings it down to $22 when active.</span>
+      </div>
+
+      <div class="price-card">
+        <span class="price-kind">One-time</span>
+        <span class="price-name">Content B</span>
+        <div class="price-figures">
+          <span class="price-full struck">$17</span>
+          <span class="price-discounted">$12</span>
+        </div>
+        <span class="price-badge">&minus;$5 with coupon</span>
+        <span class="price-note">Full price $17. A fixed $5 coupon brings it down to $12 when active.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">02</div>
+    <h2>How to model this in Stripe</h2>
+    <p class="section-intro">One <code>Product</code> and one <code>Price</code> per item — never a second Price with the discount baked in. The list price stays fixed; the discount layered on top is what moves the number.</p>
+
+    <div class="scroll-wrap">
+      <table class="obj-table">
+        <thead>
+          <tr><th>Stripe object</th><th>Core App</th><th>Content A / B</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Price</td>
+            <td>recurring, $19/month</td>
+            <td>one-time, $29 and $17</td>
+          </tr>
+          <tr>
+            <td>Checkout mode</td>
+            <td><code>subscription</code></td>
+            <td><code>payment</code></td>
+          </tr>
+          <tr>
+            <td>Coupon</td>
+            <td>none</td>
+            <td>fixed amount off, restricted to the Product via <code>applies_to.products</code></td>
+          </tr>
+          <tr>
+            <td>Promotion Code</td>
+            <td>—</td>
+            <td>a code on top of the coupon — turns the promo on/off without touching the price</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:20px">Why not just create a second Price at $22 and $12: a discounted Price becomes a second source of truth for pricing, breaks revenue reporting, and can't be turned off without editing the catalog. A <strong>coupon</strong> solves this — toggle it, expire it, or cap its redemptions without touching the original Price.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-num">03</div>
+    <h2>One Customer, separate purchases</h2>
+    <p class="section-intro">Each user becomes <strong>a single Stripe Customer</strong>, reused for every future purchase — that's what ties the app subscription and the standalone content purchases to the same person.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <span class="flow-index">1</span>
+        <div>
+          <div class="flow-title">Customer subscribes to the Core App</div>
+          <div class="flow-body">Checkout Session in <code>subscription</code> mode. Since it's the first purchase, Stripe creates the Customer at this point.</div>
+          <span class="flow-event">checkout.session.completed</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-index">2</span>
+        <div>
+          <div class="flow-title">Later, buys Content A</div>
+          <div class="flow-body">New Checkout Session, now in <code>payment</code> mode, passing the existing <code>customer</code> — no second record is created.</div>
+          <span class="flow-event">checkout.session.completed</span>
+        </div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-index">3</span>
+        <div>
+          <div class="flow-title">Eventually, buys Content B</div>
+          <div class="flow-body">Same pattern as step 2. All three purchases show up together in that Customer's history in the Dashboard.</div>
+          <span class="flow-event">checkout.session.completed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">04</div>
+    <h2>Open decisions</h2>
+    <p class="section-intro">Points worth answering before implementing — they change the checkout flow above.</p>
+
+    <ul class="qlist">
+      <li><span><strong>Is content access lifetime?</strong>A one-time purchase usually implies permanent ownership. If it's actually a 1-year access window instead, that item becomes an annual Subscription, not a one-time Price.</span></li>
+      <li><span><strong>Is the discount always visible, or a one-off promo?</strong>Decides whether the reduced price shows directly on the page (apply the coupon automatically in the Checkout Session) or the customer has to type a code (<code>allow_promotion_codes: true</code>).</span></li>
+      <li><span><strong>Does the discount depend on already owning the app?</strong>If it's a conditional upsell — "since you're already a subscriber, get Content A for $22" — the Promotion Code needs to be generated dynamically at the right moment, not left public.</span></li>
+      <li><span><strong>Does canceling the app affect access to content already bought?</strong>A Checkout Session in <code>payment</code> mode is a one-off charge — it isn't tied to the app's Subscription object, so canceling the subscription has no effect on it by default. Confirm that's the intent.</span></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-num">05</div>
+    <h2>Next steps</h2>
+    <ul class="checklist">
+      <li>Create the 3 Products in the Stripe Dashboard (App, Content A, Content B)</li>
+      <li>Create the recurring $19 Price and the two one-time Prices ($29, $17)</li>
+      <li>Create the 2 fixed-amount Coupons, each restricted to its Product</li>
+      <li>Decide the 4 questions from the previous section</li>
+      <li>Only then implement the Checkout Sessions and the webhooks</li>
+    </ul>
+  </section>
+
+  <footer class="doc-foot">
+    <span>Architecture draft</span>
+  </footer>
+
+</div>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sidepath-app",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "app", "-l", "4173"],
+      "port": 4173
+    }
+  ]
+}
