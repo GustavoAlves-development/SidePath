@@ -64,7 +64,7 @@ function goToPanel(id) {
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
-document.querySelectorAll('.addon-hub-card').forEach(card => {
+document.querySelectorAll('.addon-hub-card, .addon-featured').forEach(card => {
   card.addEventListener('click', () => goToPanel(card.dataset.target));
 });
 
