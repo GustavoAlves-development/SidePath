@@ -1287,6 +1287,21 @@ function refreshAllGates() {
   refreshUnlockButtons();
 }
 
+// ---------- Reviewer preview unlock (for Stripe / partner review only) ----------
+// Visiting /app/?reviewer=<token> unlocks every add-on locally, the same way a
+// real purchase would, so a reviewer can see the full product without paying.
+// Not linked from anywhere in the app — only shared directly with reviewers.
+const REVIEWER_TOKEN = 'a2382e7ce2083eceb7e40338';
+const reviewerParams = new URLSearchParams(window.location.search);
+if (reviewerParams.get('reviewer') === REVIEWER_TOKEN) {
+  Object.values(UNLOCK_KEYS).forEach(key => localStorage.setItem(key, 'true'));
+  window.history.replaceState({}, '', '/app/');
+  const banner = document.createElement('div');
+  banner.className = 'reviewer-banner';
+  banner.textContent = 'Reviewer preview — every add-on is unlocked so you can see the full product. Nothing was purchased.';
+  document.body.prepend(banner);
+}
+
 const resetBtn = document.getElementById('resetDemo');
 if (resetBtn) {
   resetBtn.addEventListener('click', () => {
