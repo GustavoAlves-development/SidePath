@@ -75,6 +75,9 @@
     <symbol id="icon-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 16.9v3a2 2 0 0 1-2.2 2 19.7 19.7 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.7 19.7 0 0 1 1.1 4.2 2 2 0 0 1 3.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L7.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/>
     </symbol>
+    <symbol id="icon-dollar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5.5c0-2-2.2-3.5-5-3.5s-5 1.5-5 3.5 2.2 3 5 3.5c2.8.5 5 1.5 5 3.5s-2.2 3.5-5 3.5-5-1.5-5-3.5"/>
+    </symbol>
   </svg>
 
   <header class="topbar">
@@ -88,8 +91,7 @@
     <nav class="tabs" role="tablist">
       <button class="tab active" data-panel="library" role="tab" aria-selected="true">Library</button>
       <button class="tab" data-panel="tracker" role="tab" aria-selected="false">Income Tracker</button>
-      <button class="tab" data-panel="roadmap" role="tab" aria-selected="false">First $1,000 Roadmap</button>
-      <button class="tab" data-panel="ideas" role="tab" aria-selected="false">50 Extra Income Ideas</button>
+      <button class="tab" data-panel="addons" role="tab" aria-selected="false">Add-ons</button>
       <button class="tab" data-panel="pricing" role="tab" aria-selected="false">Pricing</button>
     </nav>
   </header>
@@ -295,8 +297,63 @@
       </div>
     </section>
 
+    <!-- ================= ADD-ONS HUB ================= -->
+    <section id="addons" class="panel">
+      <div class="panel-head">
+        <div class="eyebrow">One-time purchases</div>
+        <h1>Add-ons</h1>
+        <p class="lede">Seven standalone guides and courses, each sold separately. Buy only the ones you actually want — pick a card to see what's inside.</p>
+      </div>
+
+      <div class="addon-hub-grid">
+        <button class="addon-hub-card" data-target="roadmap">
+          <span class="addon-hub-icon"><svg viewBox="0 0 24 24"><use href="#icon-sell"/></svg></span>
+          <span class="addon-hub-name">First $1,000 Roadmap</span>
+          <span class="addon-hub-desc">6-module course, start to finish</span>
+          <span class="addon-hub-price">$29</span>
+        </button>
+        <button class="addon-hub-card" data-target="ideas">
+          <span class="addon-hub-icon"><svg viewBox="0 0 24 24"><use href="#icon-star"/></svg></span>
+          <span class="addon-hub-name">50 Extra Income Ideas</span>
+          <span class="addon-hub-desc">Scannable list across 5 categories</span>
+          <span class="addon-hub-price">$17</span>
+        </button>
+        <button class="addon-hub-card" data-target="swipe">
+          <span class="addon-hub-icon"><svg viewBox="0 0 24 24"><use href="#icon-mail"/></svg></span>
+          <span class="addon-hub-name">Outreach Swipe File</span>
+          <span class="addon-hub-desc">25 copy-paste prospecting messages</span>
+          <span class="addon-hub-price">$6</span>
+        </button>
+        <button class="addon-hub-card" data-target="rates">
+          <span class="addon-hub-icon"><svg viewBox="0 0 24 24"><use href="#icon-dollar"/></svg></span>
+          <span class="addon-hub-name">The Pricing Cheat Sheet</span>
+          <span class="addon-hub-desc">Rate formulas for all 5 categories</span>
+          <span class="addon-hub-price">$15</span>
+        </button>
+        <button class="addon-hub-card" data-target="reselling">
+          <span class="addon-hub-icon"><svg viewBox="0 0 24 24"><use href="#icon-repeat"/></svg></span>
+          <span class="addon-hub-name">The Reselling Playbook</span>
+          <span class="addon-hub-desc">6-module course on flipping and resale</span>
+          <span class="addon-hub-price">$28</span>
+        </button>
+        <button class="addon-hub-card" data-target="services">
+          <span class="addon-hub-icon"><svg viewBox="0 0 24 24"><use href="#icon-wrench"/></svg></span>
+          <span class="addon-hub-name">The Service Business Builder</span>
+          <span class="addon-hub-desc">9-module course on going from gigs to a standing business</span>
+          <span class="addon-hub-price">$54</span>
+        </button>
+        <button class="addon-hub-card" data-target="accelerator">
+          <span class="addon-hub-icon"><svg viewBox="0 0 24 24"><use href="#icon-bolt"/></svg></span>
+          <span class="addon-hub-name">The $2K Side Income System</span>
+          <span class="addon-hub-desc">12-module flagship course on scaling multiple streams</span>
+          <span class="addon-hub-price">$90</span>
+        </button>
+      </div>
+    </section>
+
     <!-- ================= ROADMAP (add-on A) ================= -->
     <section id="roadmap" class="panel">
+      <button class="link-btn back-to-addons">&larr; All add-ons</button>
       <div class="panel-head panel-head-row">
         <div>
           <div class="eyebrow">Add-on &middot; one-time purchase</div>
@@ -342,6 +399,7 @@
 
     <!-- ================= 50 IDEAS (add-on B) ================= -->
     <section id="ideas" class="panel">
+      <button class="link-btn back-to-addons">&larr; All add-ons</button>
       <div class="panel-head panel-head-row">
         <div>
           <div class="eyebrow">Add-on &middot; one-time purchase</div>
@@ -385,13 +443,241 @@
       </div>
     </section>
 
+    <!-- ================= OUTREACH SWIPE FILE (add-on C) ================= -->
+    <section id="swipe" class="panel">
+      <button class="link-btn back-to-addons">&larr; All add-ons</button>
+      <div class="panel-head panel-head-row">
+        <div>
+          <div class="eyebrow">Add-on &middot; one-time purchase</div>
+          <h1>Outreach Swipe File</h1>
+          <p class="lede">25 copy-paste prospecting messages for freelance, gig, and resale outreach — find one close to your situation, edit the brackets, send it.</p>
+        </div>
+        <svg class="panel-head-art" viewBox="0 0 220 140" aria-hidden="true">
+          <g transform="rotate(-8 40 40)"><circle cx="40" cy="40" r="26" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-mail" x="27" y="27" width="26" height="26" style="color:var(--accent-strong)"/></g>
+          <g transform="rotate(6 130 30)"><circle cx="130" cy="30" r="20" fill="var(--paper-raised)" stroke="var(--line)"/><use href="#icon-copy" x="120" y="20" width="20" height="20" style="color:var(--accent)"/></g>
+          <g transform="rotate(-5 180 100)"><circle cx="180" cy="100" r="24" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-people" x="168" y="88" width="24" height="24" style="color:var(--accent-strong)"/></g>
+        </svg>
+      </div>
+
+      <div id="swipeLocked" class="locked-gate">
+        <div class="locked-card">
+          <span class="lock-icon">&#128274;</span>
+          <h2>Unlock the Swipe File</h2>
+          <p>25 ready-to-send messages across cold outreach, gig booking, and resale — copy, fill in the brackets, send.</p>
+          <div class="locked-price">
+            <span class="price-now">$6</span>
+          </div>
+          <a class="btn btn-primary btn-wide" data-unlock="swipe" href="https://buy.stripe.com/8x2cN73IQadc5Qf6SB0x204">Unlock for $6</a>
+          <span class="demo-note">Redirects to a secure Stripe checkout.</span>
+        </div>
+      </div>
+
+      <div id="swipeContent" class="gated-content hidden">
+        <div class="script-grid">
+          <div class="script-card"><div class="script-card-head"><h3>Cold outreach — social proof</h3><button class="copy-btn" data-copy-target="sw-1"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-1">Hi [Name], I noticed [specific detail about their business]. I recently helped [similar client] get [result] — would you be open to a quick chat this week?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Cold outreach — problem-first</h3><button class="copy-btn" data-copy-target="sw-2"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-2">Hi [Name], I noticed [specific problem you spotted]. I fix exactly that for people like you — want me to send over a quick idea for how?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Warm intro to a past client</h3><button class="copy-btn" data-copy-target="sw-3"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-3">Hey [Name], it's been a while! I'm taking on a few new [type of work] clients this month — if you or anyone you know needs [service], I'd love an intro.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Follow-up after no reply</h3><button class="copy-btn" data-copy-target="sw-4"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-4">Hi [Name], just floating this back up in case it got buried — still happy to help with [specific thing]. No worries either way!</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Price quote message</h3><button class="copy-btn" data-copy-target="sw-5"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-5">Here's what I'd propose: [scope in one sentence] for $[price], delivered by [date]. That includes [what's included]. I can start as soon as you confirm.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Referral ask</h3><button class="copy-btn" data-copy-target="sw-6"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-6">Glad this worked out for you! If you know one or two people who could use the same thing, I'd really appreciate the introduction.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Late payment follow-up</h3><button class="copy-btn" data-copy-target="sw-7"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-7">Hi [Name], just a friendly check-in — the invoice for [job] was due on [date] and I haven't seen it come through yet. Could you confirm when I should expect it?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Local Facebook group post</h3><button class="copy-btn" data-copy-target="sw-8"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-8">I do [service] here in [area] — [one-line proof, like "5 years, fully insured"]. Have a few openings this week if anyone needs [specific job type] done.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Subreddit reply — helpful first</h3><button class="copy-btn" data-copy-target="sw-9"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-9">Here's exactly how I'd approach that: [2-3 genuinely useful sentences]. Happy to go deeper if it'd help — I do this professionally, but no pressure either way.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Standing client upsell</h3><button class="copy-btn" data-copy-target="sw-10"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-10">I've got a [day] opening — want me on a regular schedule so you don't have to think about booking each time?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Firing a bad-fit client</h3><button class="copy-btn" data-copy-target="sw-11"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-11">I'm not able to continue taking on new work for [Client] past [date]. I'll wrap up what's in progress and hand off cleanly.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Rate increase notice</h3><button class="copy-btn" data-copy-target="sw-12"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-12">Starting [date], my rate for [service] is moving to $[new rate]. This applies to new bookings after that date — just wanted to give you advance notice.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Marketplace listing opener</h3><button class="copy-btn" data-copy-target="sw-13"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-13">[Item name] — [condition, one honest detail]. Selling because [brief real reason]. Priced to move, message with any questions.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Negotiation response</h3><button class="copy-btn" data-copy-target="sw-14"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-14">I can do $[slightly lower number] if you can pick up by [date] — that's the best I can do on this one.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Free consult call opener</h3><button class="copy-btn" data-copy-target="sw-15"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-15">Before we dive in — what's the outcome you're hoping to walk away with today? I want to make sure we spend the time on what actually matters to you.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Free consult call closer</h3><button class="copy-btn" data-copy-target="sw-16"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-16">Based on what you've told me, here's exactly what I'd do first — want me to start this week?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Booking confirmation</h3><button class="copy-btn" data-copy-target="sw-17"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-17">Confirmed for [date/time] — see you then! Reply here anytime if anything changes on your end.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Cancellation policy notice</h3><button class="copy-btn" data-copy-target="sw-18"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-18">Just so it's clear upfront: reschedules need 24 hours notice, and same-day cancellations have a $[fee] fee.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Testimonial request</h3><button class="copy-btn" data-copy-target="sw-19"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-19">So glad it worked out! Would you be up for a quick two-line review of how it went? It really helps other people trust the process.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Re-engaging an old lead</h3><button class="copy-btn" data-copy-target="sw-20"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-20">Hi [Name], circling back after a while — still working on [problem they had]? Happy to pick this back up if the timing's better now.</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Discovery question opener</h3><button class="copy-btn" data-copy-target="sw-21"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-21">Quick question before I quote this — what's the actual deadline you're working against, and what happens if it slips?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Scope-creep boundary</h3><button class="copy-btn" data-copy-target="sw-22"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-22">Happy to add that — it's outside the original scope, so here's a quick add-on quote: $[amount] for [what's added].</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Local business cold pitch</h3><button class="copy-btn" data-copy-target="sw-23"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-23">Hi, I'm a regular at [business] and noticed [specific opportunity]. I help local businesses with exactly that — mind if I send over a quick idea?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Asking for a bigger retainer</h3><button class="copy-btn" data-copy-target="sw-24"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-24">We've been consistently going over the current scope the last couple months — want to move to a bigger retainer that actually covers it?</pre></div>
+          <div class="script-card"><div class="script-card-head"><h3>Ending a project cleanly</h3><button class="copy-btn" data-copy-target="sw-25"><svg viewBox="0 0 24 24"><use href="#icon-copy"/></svg>Copy</button></div><pre class="script-body" id="sw-25">Everything's wrapped up on my end — let me know if anything needs a final tweak, otherwise consider this one done. Great working with you!</pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRICING CHEAT SHEET (add-on D) ================= -->
+    <section id="rates" class="panel">
+      <button class="link-btn back-to-addons">&larr; All add-ons</button>
+      <div class="panel-head panel-head-row">
+        <div>
+          <div class="eyebrow">Add-on &middot; one-time purchase</div>
+          <h1>The Pricing Cheat Sheet</h1>
+          <p class="lede">A rate formula and worked example for each of the 5 categories — for when you're staring at a blank quote box and need a number fast.</p>
+        </div>
+        <svg class="panel-head-art" viewBox="0 0 220 140" aria-hidden="true">
+          <g transform="rotate(-8 44 40)"><circle cx="44" cy="40" r="26" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-dollar" x="31" y="27" width="26" height="26" style="color:var(--accent-strong)"/></g>
+          <g transform="rotate(6 140 26)"><circle cx="140" cy="26" r="20" fill="var(--paper-raised)" stroke="var(--line)"/><use href="#icon-freelance" x="130" y="16" width="20" height="20" style="color:var(--accent)"/></g>
+          <g transform="rotate(-5 180 100)"><circle cx="180" cy="100" r="24" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-sell" x="168" y="88" width="24" height="24" style="color:var(--accent-strong)"/></g>
+        </svg>
+      </div>
+
+      <div id="ratesLocked" class="locked-gate">
+        <div class="locked-card">
+          <span class="lock-icon">&#128274;</span>
+          <h2>Unlock the Cheat Sheet</h2>
+          <p>A formula and a worked example for pricing in all 5 categories — freelance, resale, gig, online, and teaching.</p>
+          <div class="locked-price">
+            <span class="price-now">$15</span>
+          </div>
+          <a class="btn btn-primary btn-wide" data-unlock="rates" href="https://buy.stripe.com/7sYbJ36V25WWceDb8R0x205">Unlock for $15</a>
+          <span class="demo-note">Redirects to a secure Stripe checkout.</span>
+        </div>
+      </div>
+
+      <div id="ratesContent" class="gated-content hidden">
+        <div class="filter-row" id="ratesFilters">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="freelance">Freelance &amp; Services</button>
+          <button class="filter-chip" data-filter="sell">Sell &amp; Flip</button>
+          <button class="filter-chip" data-filter="gig">Gig &amp; Local</button>
+          <button class="filter-chip" data-filter="online">Online &amp; Content</button>
+          <button class="filter-chip" data-filter="teach">Teach &amp; Consult</button>
+        </div>
+        <div class="idea-grid" id="ratesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ================= RESELLING PLAYBOOK (add-on E) ================= -->
+    <section id="reselling" class="panel">
+      <button class="link-btn back-to-addons">&larr; All add-ons</button>
+      <div class="panel-head panel-head-row">
+        <div>
+          <div class="eyebrow">Add-on &middot; one-time purchase</div>
+          <h1>The Reselling Playbook</h1>
+          <p class="lede">A six-module course covering the full resale loop — sourcing, cleaning, pricing, listing, shipping, and reinvesting — for turning flips into a repeatable side income.</p>
+        </div>
+        <svg class="panel-head-art" viewBox="0 0 220 140" aria-hidden="true">
+          <g transform="rotate(-8 40 40)"><circle cx="40" cy="40" r="26" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-box" x="27" y="27" width="26" height="26" style="color:var(--accent-strong)"/></g>
+          <g transform="rotate(6 130 28)"><circle cx="130" cy="28" r="20" fill="var(--paper-raised)" stroke="var(--line)"/><use href="#icon-sell" x="120" y="18" width="20" height="20" style="color:var(--accent)"/></g>
+          <g transform="rotate(-5 182 100)"><circle cx="182" cy="100" r="24" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-repeat" x="170" y="88" width="24" height="24" style="color:var(--accent-strong)"/></g>
+        </svg>
+      </div>
+
+      <div id="resellingLocked" class="locked-gate">
+        <div class="locked-card">
+          <span class="lock-icon">&#128274;</span>
+          <h2>Unlock the Reselling Playbook</h2>
+          <p>Six modules, in order, from finding inventory to reinvesting the profit — plus every future update to this course.</p>
+          <div class="locked-price">
+            <span class="price-now">$28</span>
+          </div>
+          <a class="btn btn-primary btn-wide" data-unlock="reselling" href="https://buy.stripe.com/4gM9AVenuetsguTa4N0x206">Unlock for $28</a>
+          <span class="demo-note">Redirects to a secure Stripe checkout.</span>
+        </div>
+      </div>
+
+      <div id="resellingContent" class="gated-content hidden">
+        <div class="progress-strip">
+          <div class="progress-strip-head">
+            <span id="resellingProgressLabel">0 of 6 modules complete</span>
+            <span class="progress-strip-sub">Check off a module once you've actually done it, not just read it.</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="resellingProgressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="module-list" id="resellingModuleList"></div>
+      </div>
+    </section>
+
+    <!-- ================= SERVICE BUSINESS BUILDER (add-on F) ================= -->
+    <section id="services" class="panel">
+      <button class="link-btn back-to-addons">&larr; All add-ons</button>
+      <div class="panel-head panel-head-row">
+        <div>
+          <div class="eyebrow">Add-on &middot; one-time purchase</div>
+          <h1>The Service Business Builder</h1>
+          <p class="lede">A nine-module course on turning one-off gig work into a standing local service business — packaging, pricing, booking systems, and your first subcontractor.</p>
+        </div>
+        <svg class="panel-head-art" viewBox="0 0 220 140" aria-hidden="true">
+          <g transform="rotate(-8 40 40)"><circle cx="40" cy="40" r="26" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-wrench" x="27" y="27" width="26" height="26" style="color:var(--accent-strong)"/></g>
+          <g transform="rotate(6 130 28)"><circle cx="130" cy="28" r="20" fill="var(--paper-raised)" stroke="var(--line)"/><use href="#icon-gig" x="120" y="18" width="20" height="20" style="color:var(--accent)"/></g>
+          <g transform="rotate(-5 182 100)"><circle cx="182" cy="100" r="24" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-calendar" x="170" y="88" width="24" height="24" style="color:var(--accent-strong)"/></g>
+        </svg>
+      </div>
+
+      <div id="servicesLocked" class="locked-gate">
+        <div class="locked-card">
+          <span class="lock-icon">&#128274;</span>
+          <h2>Unlock the Service Business Builder</h2>
+          <p>Nine modules, in order, from picking a service to knowing when you've outgrown solo — plus every future update to this course.</p>
+          <div class="locked-price">
+            <span class="price-now">$54</span>
+          </div>
+          <a class="btn btn-primary btn-wide" data-unlock="services" href="https://buy.stripe.com/cNi28tbbi2KKdiH6SB0x207">Unlock for $54</a>
+          <span class="demo-note">Redirects to a secure Stripe checkout.</span>
+        </div>
+      </div>
+
+      <div id="servicesContent" class="gated-content hidden">
+        <div class="progress-strip">
+          <div class="progress-strip-head">
+            <span id="servicesProgressLabel">0 of 9 modules complete</span>
+            <span class="progress-strip-sub">Check off a module once you've actually done it, not just read it.</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="servicesProgressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="module-list" id="servicesModuleList"></div>
+      </div>
+    </section>
+
+    <!-- ================= $2K SIDE INCOME SYSTEM (add-on G) ================= -->
+    <section id="accelerator" class="panel">
+      <button class="link-btn back-to-addons">&larr; All add-ons</button>
+      <div class="panel-head panel-head-row">
+        <div>
+          <div class="eyebrow">Add-on &middot; one-time purchase &middot; flagship</div>
+          <h1>The $2K Side Income System</h1>
+          <p class="lede">A twelve-module program for combining multiple income streams into one system — operating rhythm, automation, outsourcing, and the tax basics, for people ready to scale past their first $1,000.</p>
+        </div>
+        <svg class="panel-head-art" viewBox="0 0 220 140" aria-hidden="true">
+          <g transform="rotate(-8 40 40)"><circle cx="40" cy="40" r="26" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-bolt" x="27" y="27" width="26" height="26" style="color:var(--accent-strong)"/></g>
+          <g transform="rotate(6 130 28)"><circle cx="130" cy="28" r="20" fill="var(--paper-raised)" stroke="var(--line)"/><use href="#icon-layers" x="120" y="18" width="20" height="20" style="color:var(--accent)"/></g>
+          <g transform="rotate(-5 182 100)"><circle cx="182" cy="100" r="24" fill="var(--accent-soft)" stroke="var(--line)"/><use href="#icon-dollar" x="170" y="88" width="24" height="24" style="color:var(--accent-strong)"/></g>
+        </svg>
+      </div>
+
+      <div id="acceleratorLocked" class="locked-gate">
+        <div class="locked-card">
+          <span class="lock-icon">&#128274;</span>
+          <h2>Unlock the $2K System</h2>
+          <p>Twelve modules, in order, from picking your stack to planning your next $1,000 — plus every future update to this course.</p>
+          <div class="locked-price">
+            <span class="price-now">$90</span>
+          </div>
+          <a class="btn btn-primary btn-wide" data-unlock="accelerator" href="https://buy.stripe.com/fZufZj1AI0CCfqP4Kt0x208">Unlock for $90</a>
+          <span class="demo-note">Redirects to a secure Stripe checkout.</span>
+        </div>
+      </div>
+
+      <div id="acceleratorContent" class="gated-content hidden">
+        <div class="progress-strip">
+          <div class="progress-strip-head">
+            <span id="acceleratorProgressLabel">0 of 12 modules complete</span>
+            <span class="progress-strip-sub">Check off a module once you've actually done it, not just read it.</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="acceleratorProgressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="module-list" id="acceleratorModuleList"></div>
+      </div>
+    </section>
+
     <!-- ================= PRICING ================= -->
     <section id="pricing" class="panel">
       <div class="panel-head">
         <div>
           <div class="eyebrow">Plans</div>
           <h1>One app, buy what you need</h1>
-          <p class="lede">The Library is a one-time purchase. The Roadmap and the Ideas list are separate one-time add-ons — most people end up with all three.</p>
+          <p class="lede">The Library is a one-time purchase. Everything else is a separate one-time add-on — buy only the ones you actually want.</p>
         </div>
       </div>
 
@@ -410,33 +696,44 @@
           </ul>
           <span class="price-status active">You're using this now</span>
         </div>
+      </div>
 
-        <div class="price-card">
-          <span class="price-kind">One-time</span>
+      <h2 class="addon-mini-heading">Add-ons</h2>
+      <div class="addon-mini-grid">
+        <div class="addon-mini-card">
           <span class="price-name">First $1,000 Roadmap</span>
-          <div class="price-figures">
-            <span class="price-full">$29</span>
-          </div>
-          <ul class="price-features">
-            <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg>6 modules, in order, start to finish</li>
-            <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg>Every future update to the course</li>
-            <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg>Pay once, yours to keep</li>
-          </ul>
-          <a class="btn btn-primary btn-wide" data-unlock="roadmap" href="https://buy.stripe.com/14AfZj7Z60CCguTel30x201">Unlock for $29</a>
+          <span class="price-full">$29</span>
+          <a class="btn btn-primary btn-small" data-unlock="roadmap" href="https://buy.stripe.com/14AfZj7Z60CCguTel30x201">Unlock</a>
         </div>
-
-        <div class="price-card">
-          <span class="price-kind">One-time</span>
+        <div class="addon-mini-card">
           <span class="price-name">50 Extra Income Ideas</span>
-          <div class="price-figures">
-            <span class="price-full">$17</span>
-          </div>
-          <ul class="price-features">
-            <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg>All 50 ideas across 5 categories</li>
-            <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg>Save favorites, filter by type</li>
-            <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg>Pay once, yours to keep</li>
-          </ul>
-          <a class="btn btn-primary btn-wide" data-unlock="ideas" href="https://buy.stripe.com/3cI28ta7efxw2E37WF0x202">Unlock for $17</a>
+          <span class="price-full">$17</span>
+          <a class="btn btn-primary btn-small" data-unlock="ideas" href="https://buy.stripe.com/3cI28ta7efxw2E37WF0x202">Unlock</a>
+        </div>
+        <div class="addon-mini-card">
+          <span class="price-name">Outreach Swipe File</span>
+          <span class="price-full">$6</span>
+          <a class="btn btn-primary btn-small" data-unlock="swipe" href="https://buy.stripe.com/8x2cN73IQadc5Qf6SB0x204">Unlock</a>
+        </div>
+        <div class="addon-mini-card">
+          <span class="price-name">The Pricing Cheat Sheet</span>
+          <span class="price-full">$15</span>
+          <a class="btn btn-primary btn-small" data-unlock="rates" href="https://buy.stripe.com/7sYbJ36V25WWceDb8R0x205">Unlock</a>
+        </div>
+        <div class="addon-mini-card">
+          <span class="price-name">The Reselling Playbook</span>
+          <span class="price-full">$28</span>
+          <a class="btn btn-primary btn-small" data-unlock="reselling" href="https://buy.stripe.com/4gM9AVenuetsguTa4N0x206">Unlock</a>
+        </div>
+        <div class="addon-mini-card">
+          <span class="price-name">The Service Business Builder</span>
+          <span class="price-full">$54</span>
+          <a class="btn btn-primary btn-small" data-unlock="services" href="https://buy.stripe.com/cNi28tbbi2KKdiH6SB0x207">Unlock</a>
+        </div>
+        <div class="addon-mini-card">
+          <span class="price-name">The $2K Side Income System</span>
+          <span class="price-full">$90</span>
+          <a class="btn btn-primary btn-small" data-unlock="accelerator" href="https://buy.stripe.com/fZufZj1AI0CCfqP4Kt0x208">Unlock</a>
         </div>
       </div>
 
@@ -483,11 +780,11 @@
         <div class="faq-list" id="faqList">
           <div class="faq-item">
             <button class="faq-question">
-              <span>Do I have to buy all three?</span>
+              <span>Do I have to buy all the add-ons?</span>
               <span class="module-chevron">&#9662;</span>
             </button>
             <div class="faq-answer">
-              <p>No. The Library alone works on its own for $19. The Roadmap and the Ideas list are optional add-ons — buy either one whenever you actually want it, or never.</p>
+              <p>No. The Library alone works on its own for $19. Every add-on is optional — buy whichever ones you actually want, whenever you want them, or never.</p>
             </div>
           </div>
           <div class="faq-item">
@@ -496,7 +793,7 @@
               <span class="module-chevron">&#9662;</span>
             </button>
             <div class="faq-answer">
-              <p>Yes. Pay once for the Library, the Roadmap, or the Ideas list and they're yours to keep — no recurring charge, no expiration.</p>
+              <p>Yes. Pay once for the Library or any add-on and it's yours to keep — no recurring charge, no expiration.</p>
             </div>
           </div>
           <div class="faq-item">
@@ -514,7 +811,7 @@
               <span class="module-chevron">&#9662;</span>
             </button>
             <div class="faq-answer">
-              <p>New guides land in the Library monthly. The Roadmap and Ideas list get occasional updates too, included in what you already paid — no extra charge to stay current.</p>
+              <p>New guides land in the Library monthly. Course add-ons get occasional updates too, included in what you already paid — no extra charge to stay current.</p>
             </div>
           </div>
         </div>

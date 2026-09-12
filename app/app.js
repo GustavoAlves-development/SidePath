@@ -5,8 +5,8 @@
 // Swap the localStorage write below for a real entitlement check (e.g. a
 // server call that verifies the session_id) once Stripe is wired up.
 
-const UNLOCK_ROUTE_PRODUCTS = ['roadmap', 'ideas'];
-const unlockRouteMatch = window.location.pathname.match(/^\/unlock\/(roadmap|ideas)\/?$/i);
+const UNLOCK_ROUTE_PRODUCTS = ['roadmap', 'ideas', 'swipe', 'rates', 'reselling', 'services', 'accelerator'];
+const unlockRouteMatch = window.location.pathname.match(/^\/unlock\/(roadmap|ideas|swipe|rates|reselling|services|accelerator)\/?$/i);
 let pendingUnlockProduct = null;
 
 if (unlockRouteMatch) {
@@ -16,7 +16,15 @@ if (unlockRouteMatch) {
 }
 
 function showUnlockToast(product) {
-  const names = { roadmap: 'First $1,000 Roadmap', ideas: '50 Extra Income Ideas' };
+  const names = {
+    roadmap: 'First $1,000 Roadmap',
+    ideas: '50 Extra Income Ideas',
+    swipe: 'Outreach Swipe File',
+    rates: 'The Pricing Cheat Sheet',
+    reselling: 'The Reselling Playbook',
+    services: 'The Service Business Builder',
+    accelerator: 'The $2K Side Income System',
+  };
   const toast = document.createElement('div');
   toast.className = 'unlock-toast';
   toast.innerHTML = `<svg viewBox="0 0 24 24"><use href="#icon-check"/></svg><span>Unlocked — ${names[product] || 'your purchase'} is ready.</span>`;
@@ -46,8 +54,23 @@ tabs.forEach(tab => {
 
 function goToPanel(id) {
   const tab = document.querySelector(`.tab[data-panel="${id}"]`);
-  if (tab) tab.click();
+  if (tab) { tab.click(); return; }
+  // Not a top-level tab — it's an add-on opened from the Add-ons hub.
+  // Keep the Add-ons tab marked active while swapping the visible panel.
+  tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+  const addonsTab = document.querySelector('.tab[data-panel="addons"]');
+  if (addonsTab) { addonsTab.classList.add('active'); addonsTab.setAttribute('aria-selected', 'true'); }
+  panels.forEach(p => p.classList.toggle('active', p.id === id));
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
+
+document.querySelectorAll('.addon-hub-card').forEach(card => {
+  card.addEventListener('click', () => goToPanel(card.dataset.target));
+});
+
+document.querySelectorAll('.back-to-addons').forEach(btn => {
+  btn.addEventListener('click', () => goToPanel('addons'));
+});
 
 // ---------- Pricing FAQ accordion ----------
 
@@ -666,26 +689,31 @@ function isModuleDone(id) {
   return localStorage.getItem(`sidepath_module_${id}`) === 'true';
 }
 
-function refreshModuleState() {
-  const modules = document.querySelectorAll('.module-check');
-  let done = 0;
-  modules.forEach(btn => {
-    const id = btn.dataset.moduleId;
-    const complete = isModuleDone(id);
-    btn.closest('.module').dataset.done = complete ? 'true' : 'false';
-    if (complete) done++;
-  });
-  const total = modules.length;
-  const label = document.getElementById('roadmapProgressLabel');
-  const fill = document.getElementById('roadmapProgressFill');
-  if (label) label.textContent = `${done} of ${total} modules complete`;
-  if (fill) fill.style.width = total ? `${(done / total) * 100}%` : '0%';
-}
-
-function renderModules() {
-  const list = document.getElementById('moduleList');
+// Generic renderer for any module-based course (Roadmap and every module
+// course added since). Each course just needs its own data array and its
+// own list/progress element ids — the localStorage key is the module id
+// itself, so ids must stay unique across courses.
+function renderModuleCourse(modules, opts) {
+  const list = document.getElementById(opts.listId);
   if (!list) return;
-  list.innerHTML = MODULES.map((module, i) => `
+
+  function refreshState() {
+    const checks = list.querySelectorAll('.module-check');
+    let done = 0;
+    checks.forEach(btn => {
+      const id = btn.dataset.moduleId;
+      const complete = isModuleDone(id);
+      btn.closest('.module').dataset.done = complete ? 'true' : 'false';
+      if (complete) done++;
+    });
+    const total = checks.length;
+    const label = document.getElementById(opts.progressLabelId);
+    const fill = document.getElementById(opts.progressFillId);
+    if (label) label.textContent = `${done} of ${total} modules complete`;
+    if (fill) fill.style.width = total ? `${(done / total) * 100}%` : '0%';
+  }
+
+  list.innerHTML = modules.map((module, i) => `
     <div class="module" data-open="${i === 0 ? 'true' : 'false'}">
       <div class="module-head">
         <button class="check-toggle module-check" data-module-id="${module.id}" aria-label="Mark module complete"><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg></button>
@@ -713,14 +741,315 @@ function renderModules() {
       const id = btn.dataset.moduleId;
       const key = `sidepath_module_${id}`;
       localStorage.setItem(key, isModuleDone(id) ? 'false' : 'true');
-      refreshModuleState();
+      refreshState();
     });
   });
 
-  refreshModuleState();
+  refreshState();
 }
 
-renderModules();
+renderModuleCourse(MODULES, { listId: 'moduleList', progressLabelId: 'roadmapProgressLabel', progressFillId: 'roadmapProgressFill' });
+
+// ---------- Reselling Playbook modules data ----------
+
+const RESELLING_MODULES = [
+  { id: 'rm1', title: 'Find Inventory Worth Buying', body: [
+    { t: 'p', c: "Reselling only works if what you buy has more room between your cost and the resale price than the time it takes to find, clean, and list it. Sourcing well matters more than any single sale." },
+    { t: 'h3', c: 'Where the margin actually is' },
+    { t: 'ul', items: [
+      "Estate and moving sales — sellers want it gone, not top dollar",
+      "Thrift stores on markdown days — check the schedule, most run one",
+      "Clearance aisles and end-of-season retail — buy low, resell in season elsewhere",
+      "Local \"free\" and \"moving\" posts — filter for anything solid-wood or name-brand"
+    ] },
+    { t: 'callout', label: 'Quick math', c: "Anything you can't resell for at least 2.5x what you paid, after fees, usually isn't worth the time to clean and list." },
+    { t: 'p', c: "Walk into any source already knowing your two or three categories — don't buy something just because it's cheap if you don't already know where it sells." },
+  ] },
+  { id: 'rm2', title: 'Clean It, Fix It, Shoot It', body: [
+    { t: 'p', c: "The gap between a $20 sale and a $60 sale for the same item is almost always presentation, not the item itself." },
+    { t: 'h3', c: 'Fix the small stuff' },
+    { t: 'ul', items: [
+      "A loose screw, a missing knob, a scuff — small fixes most buyers won't bother making themselves",
+      "A deep clean of fabric, wood, or metal — buyers pay a premium for \"looks new\"",
+      "Replace what's genuinely broken only if the part costs less than the value it adds"
+    ] },
+    { t: 'h3', c: 'Photograph like it\'s already sold' },
+    { t: 'p', c: "Shoot in daylight, against a plain background, from the angle a buyer actually cares about — four clear photos beat one blurry hero shot every time." },
+    { t: 'callout', label: 'Try this', c: "Take one photo of any damage or wear up close, and caption it. Buyers trust an honest flaw photo more than a suspiciously perfect listing." },
+  ] },
+  { id: 'rm3', title: 'Price to Sell This Week', body: [
+    { t: 'p', c: "A resold item's value is whatever a specific buyer will pay this week — not what you paid, not what it's \"worth,\" and not what one outlier listing sold for six months ago." },
+    { t: 'h3', c: 'Anchor to recent sold prices' },
+    { t: 'p', c: "Check sold listings, not active ones — active listings are asking prices, often too high, and tell you nothing about what actually clears." },
+    { t: 'ul', items: [
+      "Price 10-15% above your target to leave room for one counter-offer",
+      "If it hasn't sold in 10 days, drop it 10% rather than waiting it out",
+      "Bundle slow single items together rather than dropping each one repeatedly"
+    ] },
+    { t: 'callout', label: 'Quick math', c: "Bought for $15, comps sell at $55-65 → list at $60, expect to land near $50-55 after one round of negotiation." },
+  ] },
+  { id: 'rm4', title: 'Pick the Right Platform for Each Item', body: [
+    { t: 'p', c: "The same item can sell for very different prices depending on where you list it — match the category to the platform instead of posting everything in one place out of habit." },
+    { t: 'ul', items: [
+      "Bulky furniture and anything needing local pickup → general local marketplace",
+      "Collectibles, niche gear, specific brands → a specialty forum or community that already knows the value",
+      "High-value items that survive shipping well → a national marketplace, worth the extra shipping hassle"
+    ] },
+    { t: 'h3', c: 'Cross-post, but track it' },
+    { t: 'p', c: "Listing in two or three places multiplies your buyer pool, but only if you mark an item sold everywhere the moment it moves — a stale duplicate listing is the fastest way to lose a buyer's trust." },
+  ] },
+  { id: 'rm5', title: 'Ship Without Losing the Margin', body: [
+    { t: 'p', c: "Shipping is where resale margin quietly disappears — an item priced right can still lose money if the box, tape, and postage weren't priced in from the start." },
+    { t: 'h3', c: 'Price shipping in before you list, not after' },
+    { t: 'ul', items: [
+      "Weigh and measure a packed box before you set your price, not after a sale",
+      "Buy boxes and padding in bulk — per-unit cost drops fast past a handful of sales",
+      "Use the platform's own shipping label tools — they're usually cheaper than retail counter rates"
+    ] },
+    { t: 'callout', label: 'Quick math', c: "A $30 sale with $9 in shipping and packaging you forgot to price in is really a $21 sale. Build it into the listed price instead." },
+    { t: 'p', c: "Document the condition with photos right before you seal the box — it's your best protection if a buyer disputes what arrived." },
+  ] },
+  { id: 'rm6', title: 'Reinvest and Build a Repeatable Loop', body: [
+    { t: 'p', c: "A single profitable flip is luck. A repeatable loop — source, fix, list, ship, reinvest — is a business, and the difference is whether you track it." },
+    { t: 'h3', c: 'Close the loop every time' },
+    { t: 'ul', items: [
+      "Log cost, sale price, and time spent per item, even roughly",
+      "Reinvest a fixed share of profit into the next batch of inventory before spending the rest",
+      "Drop whichever category is consistently your worst margin, even if it's fun to source"
+    ] },
+    { t: 'callout', label: 'Try this', c: "After ten sales, sort them by profit-per-hour, not profit-per-item. The categories at the bottom usually aren't worth the shelf space." },
+    { t: 'p', c: "Scaling a resale side income isn't finding one huge item — it's shortening the loop between selling one thing and having the next one ready to list." },
+  ] },
+];
+
+renderModuleCourse(RESELLING_MODULES, { listId: 'resellingModuleList', progressLabelId: 'resellingProgressLabel', progressFillId: 'resellingProgressFill' });
+
+// ---------- Service Business Builder modules data ----------
+
+const SERVICES_MODULES = [
+  { id: 'sm1', title: 'Pick a Service With Repeat Demand', body: [
+    { t: 'p', c: "Not every gig turns into a business — the ones that do are the ones people need again on a schedule, not just once." },
+    { t: 'ul', items: [
+      "Cleaning, lawn care, pool care — weekly or biweekly by nature",
+      "Dog walking, pet sitting — daily or several times a week",
+      "Errands for elderly neighbors — recurring by need, not by choice",
+      "One-off moving or hauling help — rarely repeats with the same customer"
+    ] },
+    { t: 'h3', c: 'Choose based on your calendar, not your interest' },
+    { t: 'p', c: "Pick whichever repeat-demand service fits the hours you actually have free every week — a service you can't show up for consistently never becomes a business, no matter how much you enjoy it." },
+  ] },
+  { id: 'sm2', title: 'Package It Into an Offer', body: [
+    { t: 'p', c: "Ad hoc jobs priced on the spot are hard to scale — a defined package is what turns \"I can help with that\" into something you can actually sell repeatedly." },
+    { t: 'h3', c: 'Name three tiers, not fifty options' },
+    { t: 'ul', items: [
+      "Basic — the core job, nothing extra",
+      "Standard — core job plus the two add-ons people ask for most",
+      "Full — everything, for the customer who wants to not think about it"
+    ] },
+    { t: 'callout', label: 'Try this', c: "Write your three tiers on one page with a flat price each. Send that page instead of re-quoting every new customer from scratch." },
+    { t: 'p', c: "A customer choosing between three clear options closes faster than one waiting on a custom quote." },
+  ] },
+  { id: 'sm3', title: 'Set Recurring Pricing', body: [
+    { t: 'p', c: "Recurring customers are worth discounting for, but only in a way that rewards the commitment without undervaluing the work." },
+    { t: 'h3', c: 'Frame it as a loyalty rate, not a discount' },
+    { t: 'ul', items: [
+      "Weekly: your best rate, since it's your most predictable income",
+      "Biweekly: a smaller discount than weekly — more gaps, more setup time per visit",
+      "One-off: full price, always — it's the least efficient booking for you to run"
+    ] },
+    { t: 'callout', label: 'Quick math', c: "If a one-off job is $80, a weekly standing slot at $65 still beats four separate $80 bookings you'd have to re-sell each time." },
+  ] },
+  { id: 'sm4', title: 'Get Your First 10 Standing Clients', body: [
+    { t: 'p', c: "The fastest way to ten standing clients is converting the one-off customers you already have, not finding ten new people from scratch." },
+    { t: 'h3', c: 'Ask at the moment of highest satisfaction' },
+    { t: 'p', c: "Right after a job goes well, while the customer is looking at the result, offer the standing slot directly: \"Want me on the schedule every other Tuesday?\"" },
+    { t: 'ul', items: [
+      "Ask in person or by text right after delivery, not days later",
+      "Offer a specific day and time, not a vague \"want to do this regularly?\"",
+      "Track who said no and ask again in a month — timing, not interest, is often the blocker"
+    ] },
+  ] },
+  { id: 'sm5', title: 'Build a Simple Booking System', body: [
+    { t: 'p', c: "Double-bookings and missed appointments cost more standing clients than any pricing mistake — fix the calendar before you try to grow the client list." },
+    { t: 'h3', c: 'No-code is enough at this stage' },
+    { t: 'ul', items: [
+      "A shared calendar app with recurring events for standing clients",
+      "An automated text or email reminder the day before each visit",
+      "One blocked buffer slot per day for overruns, so a long job doesn't cascade into the next one"
+    ] },
+    { t: 'p', c: "You don't need custom scheduling software to look professional — you need a system that never double-books and never forgets to remind." },
+  ] },
+  { id: 'sm6', title: 'Handle Cancellations and No-Shows', body: [
+    { t: 'p', c: "A clear cancellation policy stated upfront prevents almost every awkward conversation about a missed booking later." },
+    { t: 'h3', c: 'State the policy before it\'s needed' },
+    { t: 'ul', items: [
+      "24-hour notice for a free reschedule",
+      "A flat fee, not a percentage, for a same-day cancellation — easier to state plainly",
+      "Two no-shows in a row — client moves off the standing schedule, no exceptions"
+    ] },
+    { t: 'callout', label: 'Quick script', c: "\"Just so it's clear upfront: reschedules need 24 hours notice, and same-day cancellations have a $20 fee.\" Say it once, at booking." },
+  ] },
+  { id: 'sm7', title: 'Bring on Your First Subcontractor', body: [
+    { t: 'p', c: "Once your own calendar is full of standing clients, the only way to take on more is someone else's hours — and that first hire is mostly about trust, not paperwork." },
+    { t: 'h3', c: 'Start small and supervised' },
+    { t: 'ul', items: [
+      "Shadow them on two jobs before sending them out alone",
+      "Pay per job, not per hour, until you know their pace matches yours",
+      "Keep your name on the relationship with the client — you're still accountable for the outcome"
+    ] },
+    { t: 'p', c: "The goal of the first subcontractor isn't to replace yourself — it's to prove the business works without you doing every single job personally." },
+  ] },
+  { id: 'sm8', title: 'Systemize the Repeat Work', body: [
+    { t: 'p', c: "Consistency is what turns a standing client into a client for years — and consistency across more than one person requires a written system, not shared memory." },
+    { t: 'h3', c: 'Write down what "done right" means' },
+    { t: 'ul', items: [
+      "A short checklist per job type — what gets done, in what order, every time",
+      "A standard supply kit so quality doesn't depend on who happened to restock last",
+      "A one-line note per client on their specific preferences or quirks"
+    ] },
+    { t: 'callout', label: 'Try this', c: "Write the checklist by watching yourself do the job once, not from memory afterward — you'll catch steps you'd otherwise forget to write down." },
+  ] },
+  { id: 'sm9', title: "Know When You've Outgrown Solo", body: [
+    { t: 'p', c: "There's a point where treating this as a side hustle starts costing you money and protection it wouldn't if you formalized it." },
+    { t: 'h3', c: 'The signals it\'s time' },
+    { t: 'ul', items: [
+      "You're turning down work most weeks because the calendar is full",
+      "You have more than one subcontractor working under your name",
+      "You're handling enough cash or liability that a bad job could cost more than your side income covers"
+    ] },
+    { t: 'p', c: "At that point, forming a simple LLC and getting basic liability coverage is worth the cost — it protects the income you've already built, not just the growth ahead of you." },
+  ] },
+];
+
+renderModuleCourse(SERVICES_MODULES, { listId: 'servicesModuleList', progressLabelId: 'servicesProgressLabel', progressFillId: 'servicesProgressFill' });
+
+// ---------- $2K Side Income System modules data ----------
+
+const ACCELERATOR_MODULES = [
+  { id: 'am1', title: 'Audit Your Time and Pick Your Stack', body: [
+    { t: 'p', c: "Most people trying to build real side income spread across four or five unrelated things and never get any one of them past the early, unprofitable stage." },
+    { t: 'h3', c: 'Two streams, not five' },
+    { t: 'p', c: "Pick two income streams that share either a skill or a customer — freelance writing plus a paid newsletter, or house cleaning plus a referral network of other local services. Shared skills or shared customers mean the second stream grows faster because the first one already built the foundation." },
+    { t: 'ul', items: [
+      "List everything you're currently doing for income, side or otherwise",
+      "Circle the two that share the most overlap in skill or audience",
+      "Pause everything else for 90 days — you can always restart it later"
+    ] },
+  ] },
+  { id: 'am2', title: 'Build Your Weekly Operating Rhythm', body: [
+    { t: 'p', c: "Two income streams without a schedule compete for the same hours and both suffer — a fixed weekly rhythm is what keeps both moving." },
+    { t: 'h3', c: 'Block by function, not by stream' },
+    { t: 'ul', items: [
+      "One block for delivery — doing the actual paid work",
+      "One block for sales — outreach, quotes, follow-ups",
+      "One block for admin — invoicing, tracking, scheduling"
+    ] },
+    { t: 'callout', label: 'Try this', c: "Put all three blocks on your calendar as recurring events before the week starts, not as a to-do list you'll get to." },
+    { t: 'p', c: "The sales block is the one people skip first when busy — and it's the one that determines whether next month looks like this month." },
+  ] },
+  { id: 'am3', title: 'Set Your Real Hourly Floor', body: [
+    { t: 'p', c: "With two streams running, it's easy to lose track of which one is actually paying you well — recalculate your real floor rate for each, separately." },
+    { t: 'h3', c: 'Same math, applied twice' },
+    { t: 'p', c: "Take your monthly expenses plus a margin for taxes and savings, divide by realistic billable hours per stream — not your total hours, just the ones that stream actually gets." },
+    { t: 'callout', label: 'Quick math', c: "$3,500 in needs ÷ (15 hrs/week × 4.3 weeks) ≈ $54/hr floor for a stream getting only 15 hours a week." },
+    { t: 'p', c: "If a stream's real hourly rate is below your floor after a full month, it needs a price increase or it needs to be the one you pause." },
+  ] },
+  { id: 'am4', title: 'Create a Simple Sales Pipeline', body: [
+    { t: 'p', c: "Running two streams without a pipeline means leads quietly fall through the cracks — a simple tracker beats memory every time you get past a handful of prospects." },
+    { t: 'h3', c: 'Four columns is enough' },
+    { t: 'ul', items: [
+      "New — hasn't been contacted yet",
+      "Contacted — waiting on a reply",
+      "Quoted — waiting on a decision",
+      "Won or lost — closed, either way"
+    ] },
+    { t: 'p', c: "A spreadsheet with those four columns, checked twice a week, catches more follow-ups than any amount of good intentions." },
+  ] },
+  { id: 'am5', title: 'Automate the Repetitive 20%', body: [
+    { t: 'p', c: "A fifth of the work in most side income streams is the same message, the same reminder, or the same follow-up, retyped from scratch every time." },
+    { t: 'h3', c: 'What to template first' },
+    { t: 'ul', items: [
+      "The outreach message you send most often",
+      "The booking confirmation and reminder",
+      "The follow-up you send after a job or delivery"
+    ] },
+    { t: 'callout', label: 'Try this', c: "Save your three most-used messages as text-expander snippets or canned replies — one keystroke instead of retyping." },
+    { t: 'p', c: "Automating the repetitive 20% buys back the hours that should go toward the sales block, not more admin." },
+  ] },
+  { id: 'am6', title: 'Build a Buffer, Not Just Income', body: [
+    { t: 'p', c: "Side income that all gets spent as it arrives disappears the first slow month — a buffer is what makes the income durable instead of just present." },
+    { t: 'h3', c: 'Separate before you spend' },
+    { t: 'ul', items: [
+      "Open a separate account for side income only, nothing else touches it",
+      "Move a fixed percentage — even 10% — to savings the moment it lands",
+      "Treat the buffer account as untouchable below a set floor"
+    ] },
+    { t: 'p', c: "The goal isn't a huge emergency fund immediately — it's one slow month's worth of expenses, so a bad month doesn't force you to panic-discount your rates." },
+  ] },
+  { id: 'am7', title: 'Outsource Your First Task', body: [
+    { t: 'p', c: "The first thing to hand off shouldn't be the work people are paying you for — it should be the task you're worst at or dread most." },
+    { t: 'h3', c: 'Good first tasks to hand off' },
+    { t: 'ul', items: [
+      "Editing or proofreading your own content",
+      "Data entry — invoicing, tracking, scheduling admin",
+      "Basic delivery or errand legs that don't require your specific skill"
+    ] },
+    { t: 'callout', label: 'Try this', c: "Pick the task you've procrastinated on the longest this month. That's almost always the right first thing to outsource." },
+  ] },
+  { id: 'am8', title: 'Hire Your First Subcontractor or VA', body: [
+    { t: 'p', c: "Your first hire is a trust problem before it's a skills problem — start small, supervised, and paid per task until you know their work matches your standard." },
+    { t: 'h3', c: 'The low-risk way to start' },
+    { t: 'ul', items: [
+      "Pay per completed task, not a retainer, for the first month",
+      "Give one task at a time with a clear example of \"done right\"",
+      "Review the first three deliverables closely before stepping back"
+    ] },
+    { t: 'p', c: "You're not looking for perfect on the first task — you're looking for someone who takes feedback well and improves by the third one." },
+  ] },
+  { id: 'am9', title: 'Track Everything in One Place', body: [
+    { t: 'p', c: "Running two streams plus help from other people makes it easy to lose sight of what's actually profitable — one tracker, reviewed monthly, fixes that." },
+    { t: 'h3', c: 'The monthly review ritual' },
+    { t: 'ul', items: [
+      "Log every payment in the Income Tracker as it comes in, not in a batch at month-end",
+      "Once a month, total income and real hours by stream",
+      "Ask one question: which stream paid the best per hour this month?"
+    ] },
+    { t: 'p', c: "The review takes fifteen minutes and is the single habit most likely to tell you what to do more of next month." },
+  ] },
+  { id: 'am10', title: 'Understand the Tax Basics', body: [
+    { t: 'p', c: "Side income is still taxable income, and the biggest mistake is treating the full amount you're paid as money you get to keep." },
+    { t: 'h3', c: 'The basics, not the whole picture' },
+    { t: 'ul', items: [
+      "Set aside a fixed percentage of every payment for taxes, in a separate account, before you touch the rest",
+      "Track deductible expenses — supplies, mileage, a portion of tools — as you go, not at year-end",
+      "Talk to an actual accountant once your side income becomes meaningful — this is general education, not tax advice for your specific situation"
+    ] },
+    { t: 'p', c: "Getting the habit of setting money aside right from the first payment avoids the worst version of this problem: owing money you already spent." },
+  ] },
+  { id: 'am11', title: 'Diversify Without Diluting', body: [
+    { t: 'p', c: "Adding a third income stream too early undoes the focus that made the first two work — add one only once the first two are genuinely stable." },
+    { t: 'h3', c: 'What "stable" actually means' },
+    { t: 'ul', items: [
+      "Both current streams run on a system, not constant improvisation",
+      "You could hand off a piece of either to someone else without it collapsing",
+      "You have spare hours left over most weeks, not just spare ambition"
+    ] },
+    { t: 'p', c: "A third stream added to fill genuinely spare capacity grows the business. A third stream added to escape a plateau in the first two usually just dilutes all three." },
+  ] },
+  { id: 'am12', title: 'Plan Your Next $1,000', body: [
+    { t: 'p', c: "Every income milestone should end with a short, honest review — not just a celebration, a look at what actually got you there." },
+    { t: 'h3', c: 'Ask three questions' },
+    { t: 'ul', items: [
+      "Which single habit or system produced the most income for the least effort this stretch?",
+      "What did you spend time on that produced almost nothing?",
+      "What's the smallest next milestone that would meaningfully change your situation?"
+    ] },
+    { t: 'callout', label: 'Try this', c: "Write your answers down, not just think them — review this note again at the next milestone to see if the pattern holds." },
+    { t: 'p', c: "The system that got you to your first $1,000 in extra income and the one that gets you to your next is usually the same system, run more deliberately." },
+  ] },
+];
+
+renderModuleCourse(ACCELERATOR_MODULES, { listId: 'acceleratorModuleList', progressLabelId: 'acceleratorProgressLabel', progressFillId: 'acceleratorProgressFill' });
 
 // ---------- Onboarding checklist ----------
 
@@ -875,11 +1204,53 @@ function renderIdeas() {
 
 renderIdeas();
 
+// ---------- Pricing Cheat Sheet data ----------
+
+const RATES = [
+  { cat: 'freelance', title: 'Hourly floor rate', formula: 'Monthly expenses × 1.4 ÷ realistic billable hours (not a 40-hour week).', example: '$3,200 × 1.4 ÷ (22 hrs × 4.3 wks) ≈ $47/hr floor.' },
+  { cat: 'freelance', title: 'Project quotes', formula: 'Floor rate × honest time estimate, quoted as one number, not itemized hours.', example: '15 estimated hours × $47/hr floor ≈ a $700 project quote, not "$47/hr, TBD hours."' },
+  { cat: 'freelance', title: 'Retainer pricing', formula: 'Price the retainer 10-15% below what the same hours would cost billed one-off, in exchange for guaranteed monthly income.', example: '10 hrs/month at $47/hr = $470 one-off rate → offer the retainer at $410-425.' },
+  { cat: 'sell', title: 'Resale list price', formula: 'List 10-15% above your walk-away number to leave room for one round of negotiation.', example: "You'd accept $80 → list at $90-92." },
+  { cat: 'sell', title: 'Flip markup target', formula: "Don't buy unless resale value clears at least 2.5x your cost after fees and time.", example: 'Bought for $15 → only worth it if it resells near $40+.' },
+  { cat: 'sell', title: 'Bundle pricing', formula: 'Price a bundle at 80-85% of the sum of individual asking prices — enough discount to feel like a deal, not a giveaway.', example: 'Three items at $20, $15, $10 ($45 total) → bundle at $37-38.' },
+  { cat: 'gig', title: 'Real hourly rate', formula: 'Payout ÷ total clock time, including wait time and driving — not just active job time.', example: 'A $22 job with 15 min driving + 20 min waiting = $38/hr, not $88/hr.' },
+  { cat: 'gig', title: 'Flat job pricing', formula: "Once you've done a job type a few times, price it flat per job, not hourly — customers prefer knowing the number upfront.", example: 'A mow that takes 45 min at a $40/hr target → flat $30 per mow.' },
+  { cat: 'gig', title: 'Standing client discount', formula: 'Offer 15-20% off the one-off rate for a locked weekly or biweekly slot — framed as a loyalty rate.', example: '$80 one-off job → $65-68 as a standing weekly rate.' },
+  { cat: 'online', title: 'Digital product pricing', formula: 'Price by the outcome or time saved for the buyer, not by how long the product took you to make.', example: 'A template that saves someone 3 hours of setup is worth $15-30, regardless of your build time.' },
+  { cat: 'online', title: 'Mini-course pricing', formula: 'Price against the specific stuck point it resolves, not its runtime.', example: 'A 90-minute course that saves 10 hours of trial and error can price at $49-79, not "$5/hour of content."' },
+  { cat: 'online', title: 'Sponsorship / ad rate', formula: '$10-30 per 1,000 engaged readers or viewers as a starting benchmark, adjusted for how targeted the audience is.', example: 'A newsletter with 2,000 highly specific readers can often out-price a generic list of 10,000.' },
+  { cat: 'teach', title: 'Session rate', formula: 'Price the specific result the person leaves with, not the minutes on the clock.', example: 'A session that resolves one exam-prep sticking point is worth more than its 45 minutes suggest — price the outcome.' },
+  { cat: 'teach', title: 'Session package discount', formula: 'Discount a 4-6 session package by about 10% off the per-session rate — enough to make committing the easy choice.', example: '$60/session one-off → a 4-pack at $215 ($54/session effective).' },
+  { cat: 'teach', title: 'Workshop pricing', formula: 'Price per seat so that a half-full room still covers your time at your hourly floor.', example: 'Floor rate $47/hr, 2-hour workshop, expect 6 of 10 seats to sell → price at $16-18/seat.' },
+];
+
+function renderRates() {
+  const grid = document.getElementById('ratesGrid');
+  if (!grid) return;
+  grid.innerHTML = RATES.map((rate, i) => `
+    <div class="idea-card" data-category="${rate.cat}" data-id="r${i}">
+      <span class="tag"><svg class="cat-icon" style="width:11px;height:11px;vertical-align:-1px;margin-right:4px" viewBox="0 0 24 24"><use href="#icon-${rate.cat}"/></svg>${CAT_LABEL[rate.cat]}</span>
+      <span class="idea-title">${rate.title}</span>
+      <span class="idea-note">${rate.formula}</span>
+      <span class="idea-start">&rarr; ${rate.example}</span>
+    </div>
+  `).join('');
+
+  wireFilters('ratesFilters', 'ratesGrid', '.idea-card');
+}
+
+renderRates();
+
 // ---------- Unlock / entitlement (demo, localStorage only) ----------
 
 const UNLOCK_KEYS = {
   roadmap: 'sidepath_unlocked_roadmap',
   ideas: 'sidepath_unlocked_ideas',
+  swipe: 'sidepath_unlocked_swipe',
+  rates: 'sidepath_unlocked_rates',
+  reselling: 'sidepath_unlocked_reselling',
+  services: 'sidepath_unlocked_services',
+  accelerator: 'sidepath_unlocked_accelerator',
 };
 
 function isUnlocked(product) {
@@ -912,8 +1283,7 @@ function refreshUnlockButtons() {
 }
 
 function refreshAllGates() {
-  applyGateState('roadmap');
-  applyGateState('ideas');
+  UNLOCK_ROUTE_PRODUCTS.forEach(applyGateState);
   refreshUnlockButtons();
 }
 
